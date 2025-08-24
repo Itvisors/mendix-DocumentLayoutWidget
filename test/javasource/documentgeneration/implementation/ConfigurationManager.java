@@ -19,24 +19,29 @@ import documentgeneration.proxies.Configuration;
 import documentgeneration.proxies.constants.Constants;
 
 public class ConfigurationManager {
-	enum UseLocalService {
-		UNDETERMINED, TRUE, FALSE
+	public enum ServiceType {
+		UNDETERMINED, LOCAL, CLOUD, PRIVATE
 	}
 
-	public static boolean useLocalService() {
-		if (useLocalService.equals(UseLocalService.UNDETERMINED)) {
+	public static ServiceType getServiceType() {
+		if (serviceType.equals(ServiceType.UNDETERMINED)) {
 			String overrideServiceType = Constants.getOverrideServiceType();
 
-			if (overrideServiceType != null && overrideServiceType.length() > 0) {
+			if (overrideServiceType != null && !overrideServiceType.isEmpty()) {
 				switch (overrideServiceType.toLowerCase()) {
 				case "local":
 					logging.debug("Overriding service type: local service");
-					useLocalService = UseLocalService.TRUE;
+					serviceType = ServiceType.LOCAL;
 					break;
 
 				case "cloud":
 					logging.debug("Overriding service type: cloud service");
-					useLocalService = UseLocalService.FALSE;
+					serviceType = ServiceType.CLOUD;
+					break;
+
+				case "private":
+					logging.debug("Overriding service type: private service");
+					serviceType = ServiceType.PRIVATE;
 					break;
 
 				default:
@@ -47,15 +52,27 @@ public class ConfigurationManager {
 			} else {
 				if (SystemUtils.IS_OS_WINDOWS || SystemUtils.IS_OS_MAC_OSX) {
 					logging.debug("Setting service type to local service based on OS: " + SystemUtils.OS_NAME);
-					useLocalService = UseLocalService.TRUE;
+					serviceType = ServiceType.LOCAL;
 				} else {
 					logging.debug("Setting service type to cloud service based on OS: " + SystemUtils.OS_NAME);
-					useLocalService = UseLocalService.FALSE;
+					serviceType = ServiceType.CLOUD;
 				}
 			}
 		}
 
-		return useLocalService.equals(UseLocalService.TRUE);
+		return serviceType;
+	}
+
+	public static boolean useLocalService() {
+		return getServiceType().equals(ServiceType.LOCAL);
+	}
+
+	public static boolean useCloudService() {
+		return getServiceType().equals(ServiceType.CLOUD);
+	}
+
+	public static boolean usePrivateService() {
+		return getServiceType().equals(ServiceType.PRIVATE);
 	}
 
 	public static Configuration getConfigurationObject(IContext context) {
@@ -79,7 +96,7 @@ public class ConfigurationManager {
 
 	public static URI getTokenEndpoint() {
 		try {
-			return new URI(TOKEN_URL);
+			return new URI(TOKEN_ENDPOINT);
 		} catch (URISyntaxException e) {
 			throw new RuntimeException("Invalid token endpoint: " + e.getMessage());
 		}
@@ -87,7 +104,7 @@ public class ConfigurationManager {
 
 	public static URI getGenerateEndpoint() {
 		try {
-			return new URI(GENERATE_URL);
+			return new URI(GENERATE_ENDPOINT);
 		} catch (URISyntaxException e) {
 			throw new RuntimeException("Invalid generate endpoint: " + e.getMessage());
 		}
@@ -112,16 +129,17 @@ public class ConfigurationManager {
 		return prefix;
 	}
 
-	public static final String MODULE_VERSION = "1.10.0";
-	public static final String TOKEN_URL = documentgeneration.proxies.constants.Constants.getCloudEndpoint()
-			+ "/auth/v2/token";
-	public static final String GENERATE_URL = documentgeneration.proxies.constants.Constants.getCloudEndpoint()
-			+ "/v1/generate-document";
+	public static final String MODULE_VERSION = "2.1.3";
+
+	public static final String SERVICE_ENDPOINT = documentgeneration.proxies.constants.Constants.getServiceEndpoint();
+	public static final String TOKEN_ENDPOINT = SERVICE_ENDPOINT + "/auth/v2/token";
+	public static final String GENERATE_ENDPOINT = SERVICE_ENDPOINT + "/v1/generate-document";
+
 	public static final String GENERATE_PATH = DocGenRequestHandler.ENDPOINT + DocGenRequestHandler.GENERATE_PATH;
 	public static final String RESULT_PATH = DocGenRequestHandler.ENDPOINT + DocGenRequestHandler.RESULT_PATH;
 	public static final String ERROR_PATH = DocGenRequestHandler.ENDPOINT + DocGenRequestHandler.ERROR_PATH;
 	public static final String VERIFY_PATH = DocGenRequestHandler.ENDPOINT + DocGenRequestHandler.VERIFY_PATH;
 
 	private static final ILogNode logging = Logging.logNode;
-	private static UseLocalService useLocalService = UseLocalService.UNDETERMINED;
+	private static ServiceType serviceType = ServiceType.UNDETERMINED;
 }

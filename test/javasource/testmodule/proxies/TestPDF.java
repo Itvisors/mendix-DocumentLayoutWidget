@@ -45,7 +45,7 @@ public class TestPDF extends system.proxies.FileDocument
 	protected TestPDF(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixObject testPDFMendixObject)
 	{
 		super(context, testPDFMendixObject);
-		if (!com.mendix.core.Core.isSubClassOf(entityName, testPDFMendixObject.getType())) {
+		if (!testPDFMendixObject.isInstanceOf(entityName)) {
 			throw new java.lang.IllegalArgumentException(String.format("The given object is not a %s", entityName));
 		}	
 	}

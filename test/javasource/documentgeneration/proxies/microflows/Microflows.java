@@ -16,6 +16,25 @@ public final class Microflows
 	private Microflows() {}
 
 	// These are the microflows for the DocumentGeneration module
+	public static com.mendix.core.actionmanagement.MicroflowCallBuilder aCT_DocumentRequest_PageMicroflow_ExecuteBuilder(
+		documentgeneration.proxies.DocumentRequest _documentRequest
+	)
+	{
+		com.mendix.core.actionmanagement.MicroflowCallBuilder builder = Core.microflowCall("DocumentGeneration.ACT_DocumentRequest_PageMicroflow_Execute");
+		builder = builder.withParam("DocumentRequest", _documentRequest);
+		return builder;
+	}
+
+	public static void aCT_DocumentRequest_PageMicroflow_Execute(
+		IContext context,
+		documentgeneration.proxies.DocumentRequest _documentRequest
+	)
+	{
+		aCT_DocumentRequest_PageMicroflow_ExecuteBuilder(
+				_documentRequest
+			)
+			.execute(context);
+	}
 	public static com.mendix.core.actionmanagement.MicroflowCallBuilder aCT_Registration_RenewBuilder()
 	{
 		com.mendix.core.actionmanagement.MicroflowCallBuilder builder = Core.microflowCall("DocumentGeneration.ACT_Registration_Renew");
@@ -90,24 +109,15 @@ public final class Microflows
 		Object result = dS_Configuration_FindOrCreateBuilder().execute(context);
 		return result == null ? null : documentgeneration.proxies.Configuration.initialize(context, (IMendixObject) result);
 	}
-	public static com.mendix.core.actionmanagement.MicroflowCallBuilder dS_RegistrationWizard_FindOrCreateBuilder(
-		documentgeneration.proxies.Configuration _configuration
-	)
+	public static com.mendix.core.actionmanagement.MicroflowCallBuilder dS_RegistrationWizard_FindOrCreateBuilder()
 	{
 		com.mendix.core.actionmanagement.MicroflowCallBuilder builder = Core.microflowCall("DocumentGeneration.DS_RegistrationWizard_FindOrCreate");
-		builder = builder.withParam("Configuration", _configuration);
 		return builder;
 	}
 
-	public static documentgeneration.proxies.RegistrationWizard dS_RegistrationWizard_FindOrCreate(
-		IContext context,
-		documentgeneration.proxies.Configuration _configuration
-	)
+	public static documentgeneration.proxies.RegistrationWizard dS_RegistrationWizard_FindOrCreate(IContext context)
 	{
-		Object result = dS_RegistrationWizard_FindOrCreateBuilder(
-				_configuration
-			)
-			.execute(context);
+		Object result = dS_RegistrationWizard_FindOrCreateBuilder().execute(context);
 		return result == null ? null : documentgeneration.proxies.RegistrationWizard.initialize(context, (IMendixObject) result);
 	}
 	public static com.mendix.core.actionmanagement.MicroflowCallBuilder sE_AccessToken_RefreshBuilder()
@@ -130,6 +140,94 @@ public final class Microflows
 	public static void sE_DocumentRequest_Cleanup(IContext context)
 	{
 		sE_DocumentRequest_CleanupBuilder().execute(context);
+	}
+	public static com.mendix.core.actionmanagement.MicroflowCallBuilder sUB_Configuration_FindOrCreateBuilder()
+	{
+		com.mendix.core.actionmanagement.MicroflowCallBuilder builder = Core.microflowCall("DocumentGeneration.SUB_Configuration_FindOrCreate");
+		return builder;
+	}
+
+	public static documentgeneration.proxies.Configuration sUB_Configuration_FindOrCreate(IContext context)
+	{
+		Object result = sUB_Configuration_FindOrCreateBuilder().execute(context);
+		return result == null ? null : documentgeneration.proxies.Configuration.initialize(context, (IMendixObject) result);
+	}
+	public static com.mendix.core.actionmanagement.MicroflowCallBuilder sUB_ManualRegistration_ProcessBuilder(
+		documentgeneration.proxies.Configuration _configuration,
+		documentgeneration.proxies.RegistrationWizard _registrationWizard
+	)
+	{
+		com.mendix.core.actionmanagement.MicroflowCallBuilder builder = Core.microflowCall("DocumentGeneration.SUB_ManualRegistration_Process");
+		builder = builder.withParam("Configuration", _configuration);
+		builder = builder.withParam("RegistrationWizard", _registrationWizard);
+		return builder;
+	}
+
+	public static void sUB_ManualRegistration_Process(
+		IContext context,
+		documentgeneration.proxies.Configuration _configuration,
+		documentgeneration.proxies.RegistrationWizard _registrationWizard
+	)
+	{
+		sUB_ManualRegistration_ProcessBuilder(
+				_configuration,
+				_registrationWizard
+			)
+			.execute(context);
+	}
+	public static com.mendix.core.actionmanagement.MicroflowCallBuilder sUB_Registration_ProcessBuilder(
+		documentgeneration.proxies.Configuration _configuration,
+		documentgeneration.proxies.RegistrationWizard _registrationWizard
+	)
+	{
+		com.mendix.core.actionmanagement.MicroflowCallBuilder builder = Core.microflowCall("DocumentGeneration.SUB_Registration_Process");
+		builder = builder.withParam("Configuration", _configuration);
+		builder = builder.withParam("RegistrationWizard", _registrationWizard);
+		return builder;
+	}
+
+	public static void sUB_Registration_Process(
+		IContext context,
+		documentgeneration.proxies.Configuration _configuration,
+		documentgeneration.proxies.RegistrationWizard _registrationWizard
+	)
+	{
+		sUB_Registration_ProcessBuilder(
+				_configuration,
+				_registrationWizard
+			)
+			.execute(context);
+	}
+	public static com.mendix.core.actionmanagement.MicroflowCallBuilder sUB_RegistrationWizard_FindOrCreateBuilder()
+	{
+		com.mendix.core.actionmanagement.MicroflowCallBuilder builder = Core.microflowCall("DocumentGeneration.SUB_RegistrationWizard_FindOrCreate");
+		return builder;
+	}
+
+	public static documentgeneration.proxies.RegistrationWizard sUB_RegistrationWizard_FindOrCreate(IContext context)
+	{
+		Object result = sUB_RegistrationWizard_FindOrCreateBuilder().execute(context);
+		return result == null ? null : documentgeneration.proxies.RegistrationWizard.initialize(context, (IMendixObject) result);
+	}
+	public static com.mendix.core.actionmanagement.MicroflowCallBuilder vAL_ManualRegistration_InputBuilder(
+		documentgeneration.proxies.RegistrationWizard _registrationWizard
+	)
+	{
+		com.mendix.core.actionmanagement.MicroflowCallBuilder builder = Core.microflowCall("DocumentGeneration.VAL_ManualRegistration_Input");
+		builder = builder.withParam("RegistrationWizard", _registrationWizard);
+		return builder;
+	}
+
+	public static boolean vAL_ManualRegistration_Input(
+		IContext context,
+		documentgeneration.proxies.RegistrationWizard _registrationWizard
+	)
+	{
+		Object result = vAL_ManualRegistration_InputBuilder(
+				_registrationWizard
+			)
+			.execute(context);
+		return (boolean) result;
 	}
 	public static com.mendix.core.actionmanagement.MicroflowCallBuilder vAL_Registration_InputBuilder(
 		documentgeneration.proxies.RegistrationWizard _registrationWizard

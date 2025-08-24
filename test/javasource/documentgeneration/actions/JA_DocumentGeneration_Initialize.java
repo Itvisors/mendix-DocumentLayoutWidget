@@ -12,13 +12,13 @@ package documentgeneration.actions;
 import com.mendix.core.Core;
 import com.mendix.logging.ILogNode;
 import com.mendix.systemwideinterfaces.core.IContext;
-import com.mendix.webui.CustomJavaAction;
 import documentgeneration.implementation.ConfigurationManager;
 import documentgeneration.implementation.DocGenRequestHandler;
 import documentgeneration.implementation.LocalServiceLocator;
 import documentgeneration.implementation.Logging;
+import com.mendix.systemwideinterfaces.core.UserAction;
 
-public class JA_DocumentGeneration_Initialize extends CustomJavaAction<java.lang.Boolean>
+public class JA_DocumentGeneration_Initialize extends UserAction<java.lang.Boolean>
 {
 	public JA_DocumentGeneration_Initialize(IContext context)
 	{

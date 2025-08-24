@@ -6,27 +6,25 @@ package documentgeneration.proxies;
 
 public enum Enum_DocumentRequest_Status
 {
-	Pending(new java.lang.String[][] { new java.lang.String[] { "en_US", "Pending" } }),
-	Completed(new java.lang.String[][] { new java.lang.String[] { "en_US", "Completed" } }),
-	Failed(new java.lang.String[][] { new java.lang.String[] { "en_US", "Failed" } });
+	Pending("79adb33d-056f-4474-8a93-3c0b945d53c0"),
+	Completed("a6a48f4f-2ff0-4463-b62e-f208f7e5b5d3"),
+	Failed("40fc899b-7347-4f1d-8007-6cce47f62b83");
 
-	private final java.util.Map<java.lang.String, java.lang.String> captions;
-
-	private Enum_DocumentRequest_Status(java.lang.String[][] captionStrings)
+	private final java.lang.String i18nCaptionKey;
+	
+	private Enum_DocumentRequest_Status(java.lang.String i18nCaptionKey)
 	{
-		this.captions = new java.util.HashMap<>();
-		for (java.lang.String[] captionString : captionStrings) {
-			captions.put(captionString[0], captionString[1]);
-		}
+		this.i18nCaptionKey = i18nCaptionKey;
 	}
 
 	public java.lang.String getCaption(java.lang.String languageCode)
 	{
-		return captions.getOrDefault(languageCode, "en_US");
+		String caption = com.mendix.core.Core.getInternationalizedString(languageCode, i18nCaptionKey);
+		return caption.isEmpty() ? getCaption() : caption;
 	}
 
 	public java.lang.String getCaption()
 	{
-		return captions.get("en_US");
+		return com.mendix.core.Core.getInternationalizedString("en_US", i18nCaptionKey);
 	}
 }

@@ -1,6 +1,7 @@
 package documentgeneration.implementation;
 
 public interface IWaitStrategy {
+	String getName();
 	boolean canContinue();
-	void wait(int attempt) throws InterruptedException;
+	int getWaitTime(int attempt);
 }

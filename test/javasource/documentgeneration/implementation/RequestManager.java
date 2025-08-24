@@ -3,6 +3,8 @@ package documentgeneration.implementation;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import com.mendix.core.Core;
 import com.mendix.core.CoreException;
@@ -15,45 +17,49 @@ import documentgeneration.proxies.DocumentRequest;
 import documentgeneration.proxies.Enum_DocumentRequest_Status;
 import system.proxies.FileDocument;
 
-interface RequestInfo {
-	boolean canContinue();
-}
-
 public class RequestManager {
-	private static final ConcurrentMap<String, Thread> pendingWaits = new ConcurrentHashMap<>();
+	private static final ConcurrentMap<String, CountDownLatch> pendingWaits = new ConcurrentHashMap<>();
 
 	public static IMendixObject waitForResult(IWaitStrategy waitStrategy, String requestId) {
-		pendingWaits.put(requestId, Thread.currentThread());
-		try {
-			for (int i = 0; waitStrategy.canContinue(); i++) {
-				Optional<DocumentRequest> requestObject = loadFinalizedDocumentRequest(requestId);
-				if (requestObject.isPresent()) {
-					logging.trace("Received document result for request " + requestId);
-					return processResult(requestObject.get());
-				}
+		CountDownLatch latch = new CountDownLatch(1);
+		pendingWaits.put(requestId, latch);
 
-				logging.trace("Document result is not yet available, continue polling");
-				waitStrategy.wait(i);
+		for (int i = 0; waitStrategy.canContinue(); i++) {
+			Optional<DocumentRequest> documentRequest = loadFinalizedDocumentRequest(requestId);
+			if (documentRequest.isPresent()) {
+				return processResult(documentRequest.get());
 			}
-			logging.trace("Document result has not appeared, stopping polling");
-		} catch (InterruptedException e) {
-			Optional<DocumentRequest> requestObject = loadFinalizedDocumentRequest(requestId);
-			if (requestObject.isPresent()) {
-				logging.trace("Interrupted polling, document result is available for request " + requestId);
-				return processResult(requestObject.get());
+
+			logging.trace("Document result is not yet available, continue polling");
+
+			if (awaitLatchUsingStrategy(latch, waitStrategy, i)) {
+				logging.trace("Interrupted polling for request " + requestId);
 			}
-		} finally {
-			pendingWaits.remove(requestId);
 		}
 
-		failRequest(requestId);
+		logging.trace("Document result has not appeared, stopping polling");
+
+		pendingWaits.remove(requestId);
+		failDocumentRequest(requestId);
+
 		throw new DocGenPollingException("Timeout while waiting for document result for request " + requestId);
 	}
 
+	public static boolean awaitLatchUsingStrategy(CountDownLatch latch, IWaitStrategy waitStrategy, int attempt) {
+		int waitTime = waitStrategy.getWaitTime(attempt);
+		logging.trace("Wait using " + waitStrategy.getName() + ": " + waitTime + "ms");
+
+		try {
+			return latch.await(waitTime, TimeUnit.MILLISECONDS);
+		} catch (InterruptedException e) {
+			return true;
+		}
+	}
+
 	public static void interruptPendingRequest(String requestId) {
-		Thread waitingThread = pendingWaits.get(requestId);
-		if (waitingThread != null) {
-			waitingThread.interrupt();
+		CountDownLatch latch = pendingWaits.get(requestId);
+		if (latch != null) {
+			latch.countDown();
 		}
 	}
 
@@ -66,6 +72,8 @@ public class RequestManager {
 	}
 
 	private static IMendixObject processResult(DocumentRequest documentRequest) {
+		logging.trace("Processing result for document request " + documentRequest.getRequestId());
+
 		if (documentRequest.getStatus().equals(Enum_DocumentRequest_Status.Completed)) {
 			FileDocument fileDocument = DocumentRequestManager.getFileDocument(documentRequest);
 			if (fileDocument == null)
@@ -74,7 +82,7 @@ public class RequestManager {
 			return fileDocument.getMendixObject();
 		} else if (documentRequest.getStatus().equals(Enum_DocumentRequest_Status.Failed)) {
 			if (documentRequest.getErrorCode() != null)
-				DocumentRequestErrorManager.throwDocumentRequestException(documentRequest);
+				throw DocumentRequestErrorManager.createException(documentRequest);
 
 			throw new RuntimeException("Failed to generate document");
 		} else {
@@ -82,7 +90,7 @@ public class RequestManager {
 		}
 	}
 
-	private static void failRequest(String requestId) {
+	private static void failDocumentRequest(String requestId) {
 		DocumentRequest documentRequest = DocumentRequestManager.loadDocumentRequest(requestId,
 				Core.createSystemContext());
 		try {

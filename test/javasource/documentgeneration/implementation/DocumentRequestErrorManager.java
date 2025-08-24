@@ -19,22 +19,22 @@ import documentgeneration.proxies.DocumentRequest;
 
 public class DocumentRequestErrorManager {
 
-	public static RuntimeException throwDocumentRequestException(DocumentRequest documentRequest) {
+	public static RuntimeException createException(DocumentRequest documentRequest) {
 		String errorMessage = generateErrorMessage(documentRequest);
 
 		switch (DocGenServiceErrorCodes.valueOfCode(documentRequest.getErrorCode())) {
 		case DOCGEN_NAVIGATION:
-			throw new DocGenNavigationException(errorMessage);
+			return new DocGenNavigationException(errorMessage);
 		case DOCGEN_WAIT_CONTENT:
-			throw new DocGenWaitForContentException(errorMessage);
+			return new DocGenWaitForContentException(errorMessage);
 		case DOCGEN_RUNTIME:
-			throw new DocGenRuntimeException(errorMessage);
+			return new DocGenRuntimeException(errorMessage);
 		default:
-			throw new DocGenException(errorMessage);
+			return new DocGenException(errorMessage);
 		}
 	}
 
-	public static boolean handleDocumentRequestError(DocumentRequest documentRequest, IMxRuntimeRequest request) {
+	public static boolean handleError(DocumentRequest documentRequest, IMxRuntimeRequest request) {
 		try {
 			storeErrorInDocumentRequest(documentRequest, request);
 		} catch (Exception e) {

@@ -20,10 +20,13 @@ public class RegistrationWizard implements com.mendix.systemwideinterfaces.core.
 	 */
 	public enum MemberNames
 	{
+		ServiceType("ServiceType"),
 		DeploymentType("DeploymentType"),
 		PersonalAccessToken("PersonalAccessToken"),
 		AppId("AppId"),
 		ApplicationUrl("ApplicationUrl"),
+		ManualAccessToken("ManualAccessToken"),
+		ManualRefreshToken("ManualRefreshToken"),
 		RegistrationWizard_Configuration("DocumentGeneration.RegistrationWizard_Configuration");
 
 		private final java.lang.String metaName;
@@ -50,7 +53,7 @@ public class RegistrationWizard implements com.mendix.systemwideinterfaces.core.
 		if (registrationWizardMendixObject == null) {
 			throw new java.lang.IllegalArgumentException("The given object cannot be null.");
 		}
-		if (!com.mendix.core.Core.isSubClassOf(entityName, registrationWizardMendixObject.getType())) {
+		if (!registrationWizardMendixObject.isInstanceOf(entityName)) {
 			throw new java.lang.IllegalArgumentException(String.format("The given object is not a %s", entityName));
 		}	
 
@@ -74,6 +77,51 @@ public class RegistrationWizard implements com.mendix.systemwideinterfaces.core.
 	{
 		com.mendix.systemwideinterfaces.core.IMendixObject mendixObject = com.mendix.core.Core.retrieveId(context, mendixIdentifier);
 		return documentgeneration.proxies.RegistrationWizard.initialize(context, mendixObject);
+	}
+
+	/**
+	 * Get value of ServiceType
+	 * @param servicetype
+	 */
+	public final documentgeneration.proxies.Enum_ServiceType getServiceType()
+	{
+		return getServiceType(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of ServiceType
+	 */
+	public final documentgeneration.proxies.Enum_ServiceType getServiceType(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		Object obj = getMendixObject().getValue(context, MemberNames.ServiceType.toString());
+		if (obj == null) {
+			return null;
+		}
+		return documentgeneration.proxies.Enum_ServiceType.valueOf((java.lang.String) obj);
+	}
+
+	/**
+	 * Set value of ServiceType
+	 * @param servicetype
+	 */
+	public final void setServiceType(documentgeneration.proxies.Enum_ServiceType servicetype)
+	{
+		setServiceType(getContext(), servicetype);
+	}
+
+	/**
+	 * Set value of ServiceType
+	 * @param context
+	 * @param servicetype
+	 */
+	public final void setServiceType(com.mendix.systemwideinterfaces.core.IContext context, documentgeneration.proxies.Enum_ServiceType servicetype)
+	{
+		if (servicetype != null) {
+			getMendixObject().setValue(context, MemberNames.ServiceType.toString(), servicetype.toString());
+		} else {
+			getMendixObject().setValue(context, MemberNames.ServiceType.toString(), null);
+		}
 	}
 
 	/**
@@ -227,6 +275,78 @@ public class RegistrationWizard implements com.mendix.systemwideinterfaces.core.
 	public final void setApplicationUrl(com.mendix.systemwideinterfaces.core.IContext context, java.lang.String applicationurl)
 	{
 		getMendixObject().setValue(context, MemberNames.ApplicationUrl.toString(), applicationurl);
+	}
+
+	/**
+	 * @return value of ManualAccessToken
+	 */
+	public final java.lang.String getManualAccessToken()
+	{
+		return getManualAccessToken(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of ManualAccessToken
+	 */
+	public final java.lang.String getManualAccessToken(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		return (java.lang.String) getMendixObject().getValue(context, MemberNames.ManualAccessToken.toString());
+	}
+
+	/**
+	 * Set value of ManualAccessToken
+	 * @param manualaccesstoken
+	 */
+	public final void setManualAccessToken(java.lang.String manualaccesstoken)
+	{
+		setManualAccessToken(getContext(), manualaccesstoken);
+	}
+
+	/**
+	 * Set value of ManualAccessToken
+	 * @param context
+	 * @param manualaccesstoken
+	 */
+	public final void setManualAccessToken(com.mendix.systemwideinterfaces.core.IContext context, java.lang.String manualaccesstoken)
+	{
+		getMendixObject().setValue(context, MemberNames.ManualAccessToken.toString(), manualaccesstoken);
+	}
+
+	/**
+	 * @return value of ManualRefreshToken
+	 */
+	public final java.lang.String getManualRefreshToken()
+	{
+		return getManualRefreshToken(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of ManualRefreshToken
+	 */
+	public final java.lang.String getManualRefreshToken(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		return (java.lang.String) getMendixObject().getValue(context, MemberNames.ManualRefreshToken.toString());
+	}
+
+	/**
+	 * Set value of ManualRefreshToken
+	 * @param manualrefreshtoken
+	 */
+	public final void setManualRefreshToken(java.lang.String manualrefreshtoken)
+	{
+		setManualRefreshToken(getContext(), manualrefreshtoken);
+	}
+
+	/**
+	 * Set value of ManualRefreshToken
+	 * @param context
+	 * @param manualrefreshtoken
+	 */
+	public final void setManualRefreshToken(com.mendix.systemwideinterfaces.core.IContext context, java.lang.String manualrefreshtoken)
+	{
+		getMendixObject().setValue(context, MemberNames.ManualRefreshToken.toString(), manualrefreshtoken);
 	}
 
 	/**

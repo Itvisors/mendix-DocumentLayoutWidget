@@ -10,10 +10,10 @@
 package documentgeneration.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
-import com.mendix.webui.CustomJavaAction;
 import documentgeneration.implementation.DocumentGenerator;
+import com.mendix.systemwideinterfaces.core.UserAction;
 
-public class JA_GetApplicationUrl extends CustomJavaAction<java.lang.String>
+public class JA_GetApplicationUrl extends UserAction<java.lang.String>
 {
 	public JA_GetApplicationUrl(IContext context)
 	{

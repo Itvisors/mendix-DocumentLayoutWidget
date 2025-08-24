@@ -60,9 +60,11 @@ public class UserActionsRegistrar
     registrator.registerUserAction(communitycommons.actions.ListTop.class);
     registrator.registerUserAction(communitycommons.actions.LongToDateTime.class);
     registrator.registerUserAction(communitycommons.actions.memberHasChanged.class);
+    registrator.registerUserAction(communitycommons.actions.memberHasChangedValue.class);
     registrator.registerUserAction(communitycommons.actions.MergeMultiplePdfs.class);
     registrator.registerUserAction(communitycommons.actions.MonthsBetween.class);
     registrator.registerUserAction(communitycommons.actions.objectHasChanged.class);
+    registrator.registerUserAction(communitycommons.actions.objectHasChangedMemberValue.class);
     registrator.registerUserAction(communitycommons.actions.objectIsNew.class);
     registrator.registerUserAction(communitycommons.actions.OverlayPdfDocument.class);
     registrator.registerUserAction(communitycommons.actions.ParseDateTimeWithTimezone.class);
@@ -100,8 +102,11 @@ public class UserActionsRegistrar
     registrator.registerUserAction(communitycommons.actions.XSSSanitize.class);
     registrator.registerUserAction(communitycommons.actions.YearsBetween.class);
     registrator.registerUserAction(documentgeneration.actions.JA_DocumentGeneration_Initialize.class);
+    registrator.registerUserAction(documentgeneration.actions.JA_ExecutePageMicroflow.class);
     registrator.registerUserAction(documentgeneration.actions.JA_GenerateDocument.class);
     registrator.registerUserAction(documentgeneration.actions.JA_GetApplicationUrl.class);
+    registrator.registerUserAction(documentgeneration.actions.JA_GetServiceType.class);
+    registrator.registerUserAction(documentgeneration.actions.JA_Registration_Manual.class);
     registrator.registerUserAction(documentgeneration.actions.JA_Token_Refresh.class);
     registrator.registerUserAction(documentgeneration.actions.JA_Token_Request.class);
     registrator.registerUserAction(system.actions.VerifyPassword.class);

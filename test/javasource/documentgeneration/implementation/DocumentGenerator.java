@@ -66,9 +66,14 @@ public class DocumentGenerator {
 		if (ConfigurationManager.useLocalService()) {
 			logging.debug("Using local service");
 			this.executeLocalService(requestId, securityToken, timezoneId);
-		} else {
-			logging.debug("Using Cloud service");
+		} else if (ConfigurationManager.useCloudService()) {
+			logging.debug("Using cloud service");
 			this.executeCloudService(requestId, securityToken, timezoneId, getTimeoutValue());
+		} else if (ConfigurationManager.usePrivateService()) {
+			logging.debug("Using private service");
+			this.executePrivateService(requestId, securityToken, timezoneId, getTimeoutValue());
+		} else {
+			throw new RuntimeException("Unknown service type");
 		}
 
 		if (!this.waitForResult) {
@@ -139,8 +144,6 @@ public class DocumentGenerator {
 	}
 
 	private void executeCloudService(String requestId, String securityToken, String timezoneId, long timeout) {
-		URI endpoint = ConfigurationManager.getGenerateEndpoint();
-
 		IContext systemContext = Core.createSystemContext();
 		Configuration configuration = ConfigurationManager.getConfigurationObject(systemContext);
 
@@ -158,15 +161,19 @@ public class DocumentGenerator {
 			}
 		}
 
-		String accessToken = configuration.getAccessToken();
+		sendDocumentRequest(requestId, securityToken, configuration.getAccessToken(), timezoneId, timeout);
+	}
 
-		HttpHeader[] headers = new HttpHeader[] { new HttpHeader(HEADER_AUTHORIZATION, "Bearer " + accessToken),
-				new HttpHeader(HEADER_SECURITY_TOKEN, securityToken),
-				new HttpHeader("Content-Type", "application/json") };
+	private void executePrivateService(String requestId, String securityToken, String timezoneId, long timeout) {
+		sendDocumentRequest(requestId, securityToken, null, timezoneId, timeout);
+	}
+
+	private void sendDocumentRequest(String requestId, String securityToken, String accessToken, String timezoneId, long timeout) {
+		URI endpoint = ConfigurationManager.getGenerateEndpoint();
 
 		JSONObject body = new JSONObject();
 		body.put("requestId", requestId);
-		body.put("applicationUrl", getCloudApplicationURL(configuration));
+		body.put("applicationUrl", getEnvironmentApplicationURL(Core.createSystemContext()));
 		body.put("generatePath", ConfigurationManager.GENERATE_PATH);
 		body.put("resultPath", ConfigurationManager.RESULT_PATH);
 		body.put("errorPath", ConfigurationManager.ERROR_PATH);
@@ -183,6 +190,7 @@ public class DocumentGenerator {
 		logging.trace("Request body: " + requestBody);
 
 		// Send request
+		HttpHeader[] headers = getRequestHeaders(securityToken, accessToken);
 		HttpResponse response = Core.http().executeHttpRequest(endpoint, HttpMethod.POST, headers,
 				new ByteArrayInputStream(requestBody.getBytes()));
 		logging.trace("Sent request " + requestId + " to Document Generation service; response code: "
@@ -192,6 +200,18 @@ public class DocumentGenerator {
 			throw new RuntimeException("Unable to generate document for request " + requestId
 					+ ", service response code: " + response.getStatusCode());
 		}
+	}
+
+	public HttpHeader[] getRequestHeaders(String securityToken, String accessToken) {
+		ArrayList<HttpHeader> headers = new ArrayList<>();
+		headers.add(new HttpHeader("Content-Type", "application/json"));
+		headers.add(new HttpHeader(HEADER_SECURITY_TOKEN, securityToken));
+
+		if (accessToken != null) {
+			headers.add(new HttpHeader(HEADER_AUTHORIZATION, "Bearer " + accessToken));
+		}
+
+		return headers.toArray(new HttpHeader[0]);
 	}
 
 	public static FileDocument generateFileDocument(IContext context, String entity, String fileName) {
@@ -207,24 +227,23 @@ public class DocumentGenerator {
 
 	public static String getApplicationURL() {
 		String appUrl = Core.getConfiguration().getApplicationRootUrl();
-		return StringUtils.removeEnd(appUrl, "/");
+		return StringUtils.trim(StringUtils.removeEnd(appUrl, "/"));
 	}
 
 	public static String getCloudApplicationURL(Configuration configuration) {
 		String cloudAppUrl = configuration.getApplicationUrl();
-		return StringUtils.removeEnd(cloudAppUrl, "/");
+		return StringUtils.trim(StringUtils.removeEnd(cloudAppUrl, "/"));
 	}
 
 	public static String getEnvironmentApplicationURL(IContext context) {
-		if (ConfigurationManager.useLocalService()) {
-			logging.debug("Handling request using application root URL");
-
-			return DocumentGenerator.getApplicationURL();
-		} else {
-			logging.debug("Handling request using the registered application URL");
+		if (ConfigurationManager.useCloudService()) {
+			logging.trace("Using the registered application URL");
 			Configuration configuration = ConfigurationManager.getConfigurationObject(context);
 
 			return DocumentGenerator.getCloudApplicationURL(configuration);
+		} else {
+			logging.trace("Using the application root URL");
+			return DocumentGenerator.getApplicationURL();
 		}
 	}
 
@@ -257,7 +276,7 @@ public class DocumentGenerator {
 	}
 
 	public static final String HEADER_SECURITY_TOKEN = "X-Security-Token";
-	private static final String HEADER_AUTHORIZATION = "Authorization";
+	public static final String HEADER_AUTHORIZATION = "Authorization";
 
 	private static final boolean USE_SCREEN_MEDIATYPE = true;
 	private static final boolean WAIT_FOR_IDLE_NETWORK = true;

@@ -11,10 +11,10 @@ package documentgeneration.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.systemwideinterfaces.core.IMendixObject;
-import com.mendix.webui.CustomJavaAction;
 import documentgeneration.implementation.TokenManager;
+import com.mendix.systemwideinterfaces.core.UserAction;
 
-public class JA_Token_Request extends CustomJavaAction<IMendixObject>
+public class JA_Token_Request extends UserAction<IMendixObject>
 {
 	private final documentgeneration.proxies.Enum_DeploymentType deploymentType;
 	private final java.lang.String appId;

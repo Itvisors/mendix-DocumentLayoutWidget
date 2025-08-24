@@ -6,28 +6,26 @@ package documentgeneration.proxies;
 
 public enum Enum_DeploymentType
 {
-	MendixPublicCloud(new java.lang.String[][] { new java.lang.String[] { "en_US", "Mendix Public Cloud" } }),
-	MendixPrivateCloud(new java.lang.String[][] { new java.lang.String[] { "en_US", "Mendix for Private Cloud Connected" } }),
-	MendixCloudDedicated(new java.lang.String[][] { new java.lang.String[] { "en_US", "Mendix Cloud Dedicated" } }),
-	Other(new java.lang.String[][] { new java.lang.String[] { "en_US", "Other" } });
+	MendixPublicCloud("12e20c54-1cac-4290-8f18-a7244ccd738b"),
+	MendixPrivateCloud("5339dd46-d2fc-46ad-881b-7c6abb380f0a"),
+	MendixCloudDedicated("65c5fc1b-9ddd-48a9-9a59-46d13c39190f"),
+	Other("08e56593-5584-4ab3-96e2-e4ffca4ceafd");
 
-	private final java.util.Map<java.lang.String, java.lang.String> captions;
-
-	private Enum_DeploymentType(java.lang.String[][] captionStrings)
+	private final java.lang.String i18nCaptionKey;
+	
+	private Enum_DeploymentType(java.lang.String i18nCaptionKey)
 	{
-		this.captions = new java.util.HashMap<>();
-		for (java.lang.String[] captionString : captionStrings) {
-			captions.put(captionString[0], captionString[1]);
-		}
+		this.i18nCaptionKey = i18nCaptionKey;
 	}
 
 	public java.lang.String getCaption(java.lang.String languageCode)
 	{
-		return captions.getOrDefault(languageCode, "en_US");
+		String caption = com.mendix.core.Core.getInternationalizedString(languageCode, i18nCaptionKey);
+		return caption.isEmpty() ? getCaption() : caption;
 	}
 
 	public java.lang.String getCaption()
 	{
-		return captions.get("en_US");
+		return com.mendix.core.Core.getInternationalizedString("en_US", i18nCaptionKey);
 	}
 }

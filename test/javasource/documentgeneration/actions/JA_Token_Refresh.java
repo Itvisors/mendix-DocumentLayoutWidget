@@ -10,10 +10,10 @@
 package documentgeneration.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
-import com.mendix.webui.CustomJavaAction;
 import documentgeneration.implementation.TokenManager;
+import com.mendix.systemwideinterfaces.core.UserAction;
 
-public class JA_Token_Refresh extends CustomJavaAction<java.lang.Boolean>
+public class JA_Token_Refresh extends UserAction<java.lang.Boolean>
 {
 	public JA_Token_Refresh(IContext context)
 	{

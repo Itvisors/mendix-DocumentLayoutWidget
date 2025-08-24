@@ -1,10 +1,10 @@
 package documentgeneration.implementation;
 
 import java.security.SecureRandom;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+import com.mendix.core.actionmanagement.MicroflowCallBuilder;
+import com.mendix.systemwideinterfaces.core.IDataType;
 import org.apache.commons.lang3.time.DateUtils;
 
 import com.mendix.core.Core;
@@ -70,7 +70,7 @@ public class DocumentRequestManager {
 	public static DocumentRequest verifyDocumentRequest(String requestId, String securityToken)
 			throws SecurityException {
 
-		if (securityToken == null || securityToken.length() < keyLength) {
+		if (securityToken == null || securityToken.length() < SECURITY_TOKEN_KEY_LENGTH) {
 			throw new SecurityException("Invalid security token length");
 		}
 
@@ -78,8 +78,7 @@ public class DocumentRequestManager {
 		DocumentRequest documentRequest = loadDocumentRequest(requestId, systemContext);
 		IMendixObject requestMxObject = documentRequest.getMendixObject();
 
-		MendixHashString hashedToken = (MendixHashString) requestMxObject.getMember(systemContext,
-				DocumentRequest.MemberNames.SecurityToken.toString());
+		MendixHashString hashedToken = (MendixHashString) requestMxObject.getMember(DocumentRequest.MemberNames.SecurityToken.toString());
 
 		// Verify security token against stored hash
 		if (!hashedToken.verifyValue(systemContext, securityToken)) {
@@ -126,11 +125,33 @@ public class DocumentRequestManager {
 		SecureRandom random = new SecureRandom();
 		StringBuilder tokenBuilder = new StringBuilder();
 
-		for (int i = 0; i < keyLength; i++) {
+		for (int i = 0; i < SECURITY_TOKEN_KEY_LENGTH; i++) {
 			tokenBuilder.append(allowedCharacters[random.nextInt(allowedCharacters.length)]);
 		}
 
 		return tokenBuilder.toString();
+	}
+
+	public static void executePageMicroflow(DocumentRequest documentRequest, IContext context) throws CoreException {
+		if (documentRequest == null) throw new IllegalArgumentException("DocumentRequest cannot be null");
+
+		String pageMicroflow = documentRequest.getMicroflowName();
+		if (pageMicroflow == null || pageMicroflow.isEmpty())
+			throw new RuntimeException("Invalid DocumentRequest, no page microflow specified");
+
+		MicroflowCallBuilder builder = Core.microflowCall(pageMicroflow);
+		Map<String, IDataType> microflowParameters = Core.getInputParameters(pageMicroflow);
+		Long contextObjectGuid = documentRequest.getContextObjectGuid();
+
+		if (!microflowParameters.isEmpty() && contextObjectGuid != null) {
+			String contextParameter = microflowParameters.keySet().iterator().next();
+			IMendixObject contextObject = Core.retrieveId(context, Core.createMendixIdentifier(contextObjectGuid));
+
+			logging.trace("Using context object '" + contextObjectGuid + "' for '" + contextParameter + "' parameter");
+			builder = builder.withParam(contextParameter, contextObject);
+		}
+
+		builder.execute(context);
 	}
 
 	private static void setRequestStatus(DocumentRequest documentRequest, Enum_DocumentRequest_Status status)
@@ -142,5 +163,7 @@ public class DocumentRequestManager {
 	}
 
 	private static final ILogNode logging = Logging.logNode;
-	private static final int keyLength = 128;
+	
+	private static final int SECURITY_TOKEN_KEY_LENGTH = 128;
+	private static final String DOCUMENT_REQUEST_PARAMETER = "DocumentRequest";
 }

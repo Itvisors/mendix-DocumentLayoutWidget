@@ -103,12 +103,15 @@ public class DocGenRequestHandler extends RequestHandler {
 		documentRequest.setDocumentRequest_Session(Session.initialize(systemContext, session.getMendixObject()));
 		documentRequest.commit();
 
-		addCookies(response, session);
-
-		response.getHttpServletResponse().sendRedirect(DocumentGenerator.getEnvironmentApplicationURL(systemContext)
+		String location = DocumentGenerator.getEnvironmentApplicationURL(systemContext)
 	            + "/" + ConfigurationManager.getUrlPrefix() + "generate-document/"
 	            + documentRequest.getMendixObject().getId().toLong()
-	            + "?profile=Responsive");
+	            + "?profile=Responsive";
+
+		logging.debug("Redirecting to: " + location);
+
+		addCookies(response, session);
+		response.getHttpServletResponse().sendRedirect(location);
 	}
 
 	private void processResult(IMxRuntimeRequest request, IMxRuntimeResponse response, ISession session,
@@ -133,7 +136,7 @@ public class DocGenRequestHandler extends RequestHandler {
 	private void processError(IMxRuntimeRequest request, IMxRuntimeResponse response, ISession session,
 			DocumentRequest documentRequest) throws CoreException, IOException {
 
-		if (DocumentRequestErrorManager.handleDocumentRequestError(documentRequest, request)) {
+		if (DocumentRequestErrorManager.handleError(documentRequest, request)) {
 			response.setStatus(IMxRuntimeResponse.OK);
 			response.getWriter().write("200 OK");
 		} else {

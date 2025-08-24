@@ -6,27 +6,25 @@ package testmodule.proxies;
 
 public enum HeaderFooter
 {
-	Both(new java.lang.String[][] { new java.lang.String[] { "en_US", "Both" } }),
-	Header(new java.lang.String[][] { new java.lang.String[] { "en_US", "Header" } }),
-	Footer(new java.lang.String[][] { new java.lang.String[] { "en_US", "Footer" } });
+	Both("8a1812aa-b1c1-4d2f-8108-bfaf0d203405"),
+	Header("0236126d-8729-4682-8b80-a399447e274b"),
+	Footer("bc299e0e-ffea-40ae-8d08-47b2074f3f6b");
 
-	private final java.util.Map<java.lang.String, java.lang.String> captions;
-
-	private HeaderFooter(java.lang.String[][] captionStrings)
+	private final java.lang.String i18nCaptionKey;
+	
+	private HeaderFooter(java.lang.String i18nCaptionKey)
 	{
-		this.captions = new java.util.HashMap<>();
-		for (java.lang.String[] captionString : captionStrings) {
-			captions.put(captionString[0], captionString[1]);
-		}
+		this.i18nCaptionKey = i18nCaptionKey;
 	}
 
 	public java.lang.String getCaption(java.lang.String languageCode)
 	{
-		return captions.getOrDefault(languageCode, "en_US");
+		String caption = com.mendix.core.Core.getInternationalizedString(languageCode, i18nCaptionKey);
+		return caption.isEmpty() ? getCaption() : caption;
 	}
 
 	public java.lang.String getCaption()
 	{
-		return captions.get("en_US");
+		return com.mendix.core.Core.getInternationalizedString("en_US", i18nCaptionKey);
 	}
 }

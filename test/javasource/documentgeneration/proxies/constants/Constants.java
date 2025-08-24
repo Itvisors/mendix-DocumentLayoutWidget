@@ -23,11 +23,6 @@ public final class Constants
 		return (java.lang.Long)Core.getConfiguration().getConstantValue("DocumentGeneration.AsyncTimeoutInSeconds");
 	}
 
-	public static java.lang.String getCloudEndpoint()
-	{
-		return (java.lang.String)Core.getConfiguration().getConstantValue("DocumentGeneration.CloudEndpoint");
-	}
-
 	/**
 	* Path to Chrome or Chromium executable, for example: C:/Program Files/Google/Chrome/Application/Chrome.exe
 	*/
@@ -53,7 +48,11 @@ public final class Constants
 	}
 
 	/**
-	* Overrides the service type to use. The applicable values are: Local, Cloud or empty (default). When empty, the module will determine the service type based on the operating system.
+	* Overrides the service type to use. The applicable values are: Local, Cloud, Private or empty (default). When empty, the module will automatically determine the service type based on the operating system (Local for Windows/Mac, Cloud for other operating systems).
+	*  
+	* 1) Local = Uses the local service that is packaged with the PDF Document Generation module. The local service is executed on the same machine as the Mendix runtime for every document request, and is terminated afterwards.
+	* 2) Cloud = Uses the public PDF document generation service on Mendix Public Platform
+	* 3) Private = Uses a private PDF document generation service, hosted by the customer
 	*/
 	public static java.lang.String getOverrideServiceType()
 	{
@@ -68,6 +67,16 @@ public final class Constants
 	public static java.lang.Long getRequestCleanupOffsetInDays()
 	{
 		return (java.lang.Long)Core.getConfiguration().getConstantValue("DocumentGeneration.RequestCleanupOffsetInDays");
+	}
+
+	/**
+	* The endpoint of the PDF Document Generation service. Only applicable when using the 'Cloud' or 'Private' service type.
+	* 
+	* Default: https://docgen.home.mendix.com (public PDF document generation service on Mendix Public Platform)
+	*/
+	public static java.lang.String getServiceEndpoint()
+	{
+		return (java.lang.String)Core.getConfiguration().getConstantValue("DocumentGeneration.ServiceEndpoint");
 	}
 
 	/**

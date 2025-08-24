@@ -11,11 +11,11 @@ package documentgeneration.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.systemwideinterfaces.core.IMendixObject;
-import com.mendix.webui.CustomJavaAction;
 import documentgeneration.implementation.ActionValidator;
 import documentgeneration.implementation.DocumentGenerator;
+import com.mendix.systemwideinterfaces.core.UserAction;
 
-public class JA_GenerateDocument extends CustomJavaAction<IMendixObject>
+public class JA_GenerateDocument extends UserAction<IMendixObject>
 {
 	private final java.lang.String pageMicroflow;
 	private final IMendixObject contextObject;

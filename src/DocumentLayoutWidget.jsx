@@ -2,7 +2,7 @@ import "./ui/DocumentLayoutWidget.css";
 import { createElement } from "react";
 
 export function DocumentLayoutWidget(props) {
-    const { headerFooter, headerContent, bodyContent, footerContent, headerHeight, footerHeight } = props;
+    const { headerContent, bodyContent, footerContent } = props;
 
     const className = "document-layout-widget " + props.class;
 
@@ -17,17 +17,17 @@ export function DocumentLayoutWidget(props) {
 
     // The header/footer style only contains the height value.
     const headerStyle = {
-        height: headerHeight + "px"
+        height: props.headerHeight.value
     };
 
     const footerStyle = {
-        height: footerHeight + "px"
+        height: props.footerHeight.value
     };
 
     return (
         <div className={className}>
             <table className="layout-table">
-                {(headerFooter === "header" || headerFooter === "both") && (
+                {props.useHeader.value === true && (
                     <thead>
                         <tr>
                             <td>
@@ -45,7 +45,7 @@ export function DocumentLayoutWidget(props) {
                         </td>
                     </tr>
                 </tbody>
-                {(headerFooter === "footer" || headerFooter === "both") && (
+                {props.useFooter.value === true && (
                     <tfoot>
                         <tr>
                             <td>
@@ -57,13 +57,13 @@ export function DocumentLayoutWidget(props) {
                     </tfoot>
                 )}
             </table>
-            {(headerFooter === "header" || headerFooter === "both") && (
-                <div className="header" style={headerStyle}>
+            {props.useHeader.value === true && (
+                <div className="header-content" style={headerStyle}>
                     {headerContent}
                 </div>
             )}
-            {(headerFooter === "footer" || headerFooter === "both") && (
-                <div className="footer" style={footerStyle}>
+            {props.useFooter.value === true && (
+                <div className="footer-content" style={footerStyle}>
                     {footerContent}
                 </div>
             )}

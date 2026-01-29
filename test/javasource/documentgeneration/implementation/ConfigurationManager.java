@@ -129,7 +129,7 @@ public class ConfigurationManager {
 		return prefix;
 	}
 
-	public static final String MODULE_VERSION = "2.1.3";
+	public static final String MODULE_VERSION = "2.1.4";
 
 	public static final String SERVICE_ENDPOINT = documentgeneration.proxies.constants.Constants.getServiceEndpoint();
 	public static final String TOKEN_ENDPOINT = SERVICE_ENDPOINT + "/auth/v2/token";

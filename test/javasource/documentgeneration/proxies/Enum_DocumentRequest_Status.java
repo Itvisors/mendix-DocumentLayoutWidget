@@ -6,9 +6,9 @@ package documentgeneration.proxies;
 
 public enum Enum_DocumentRequest_Status
 {
-	Pending("79adb33d-056f-4474-8a93-3c0b945d53c0"),
-	Completed("a6a48f4f-2ff0-4463-b62e-f208f7e5b5d3"),
-	Failed("40fc899b-7347-4f1d-8007-6cce47f62b83");
+	Pending("2a6cae17-9ce1-4b5a-938b-4eac7f8ad9cb"),
+	Completed("8d7facb3-375d-4101-b214-2d550bacf84e"),
+	Failed("3a4f0495-dec9-4a44-a31f-8129176468fd");
 
 	private final java.lang.String i18nCaptionKey;
 	

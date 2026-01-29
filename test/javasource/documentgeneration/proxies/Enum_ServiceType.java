@@ -6,9 +6,9 @@ package documentgeneration.proxies;
 
 public enum Enum_ServiceType
 {
-	_Local("a16a9a89-bb64-4778-9010-5339d7af7396"),
-	_Cloud("9db6f693-ad92-49de-a4f0-776b09872d0c"),
-	_Private("dc6fe758-41db-459d-ba66-e75d7bdb6f30");
+	_Local("37bcfbf5-c134-4620-abbb-419408d4a0e7"),
+	_Cloud("a3b9ed52-6c05-4f4e-b7b5-29c9c2b2e96f"),
+	_Private("5f7b2603-adde-46c5-89d6-2c26597fabdb");
 
 	private final java.lang.String i18nCaptionKey;
 	

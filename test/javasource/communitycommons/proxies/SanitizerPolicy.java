@@ -6,12 +6,12 @@ package communitycommons.proxies;
 
 public enum SanitizerPolicy
 {
-	BLOCKS("05473525-4dae-469b-8909-259f06d24e3a"),
-	FORMATTING("6fec113c-d22d-4df2-9f5d-01b6ac76fbdc"),
-	IMAGES("fd0ddb2f-7c20-4072-b3e6-6a8d158ebc07"),
-	LINKS("536afc27-d4ce-4027-a409-e9978c440fb6"),
-	STYLES("0bcc7951-1746-4918-8b05-30f71906eae6"),
-	TABLES("fc54daa6-cf27-41a5-8a28-89f05f316ca1");
+	BLOCKS("2ba37505-a523-41de-a088-718573dba2a1"),
+	FORMATTING("b8e314c7-1796-4e1d-9dc3-4e2564854071"),
+	IMAGES("a265bdc4-35f7-405c-96aa-2d1d0b1187bc"),
+	LINKS("9a593f8e-db5e-46ba-86fe-8fcb4b8a9354"),
+	STYLES("f74c8134-ee21-4dd1-aaec-33b0cc2f0cc8"),
+	TABLES("76586c5f-f3a8-4152-af65-14796ec944f0");
 
 	private final java.lang.String i18nCaptionKey;
 	

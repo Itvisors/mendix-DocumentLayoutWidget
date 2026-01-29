@@ -6,7 +6,7 @@ package documentgeneration.proxies;
 
 public enum Enum_LogNode
 {
-	DocumentGeneration("36f1b833-f28c-4826-9c72-84dc04e03586");
+	DocumentGeneration("9701b029-f67f-4d43-a532-f8610a061839");
 
 	private final java.lang.String i18nCaptionKey;
 	

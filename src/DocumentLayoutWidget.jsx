@@ -1,5 +1,4 @@
 import "./ui/DocumentLayoutWidget.css";
-import { createElement } from "react";
 
 export function DocumentLayoutWidget(props) {
     const { headerFooter, headerContent, bodyContent, footerContent, headerHeight, footerHeight } = props;

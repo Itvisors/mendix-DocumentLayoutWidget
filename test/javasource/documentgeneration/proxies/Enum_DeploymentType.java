@@ -6,10 +6,10 @@ package documentgeneration.proxies;
 
 public enum Enum_DeploymentType
 {
-	MendixPublicCloud("e5c8c629-0ba5-492c-8c36-b676c33388db"),
-	MendixPrivateCloud("8964eca6-e898-485b-899f-46f3a912d66c"),
-	MendixCloudDedicated("62a21783-8549-4004-b101-96b08c405bd6"),
-	Other("6dcf70ff-1c31-4f28-9efc-ce46322f6832");
+	MendixPublicCloud("fef87f71-b225-4333-897e-297b1c436ec5"),
+	MendixPrivateCloud("2777cbe8-223f-4b86-930d-ae0d0f38a915"),
+	MendixCloudDedicated("7d255556-24e0-4185-923b-0b439f85130a"),
+	Other("382a26f7-42c3-476c-82d3-41863524dc84");
 
 	private final java.lang.String i18nCaptionKey;
 	

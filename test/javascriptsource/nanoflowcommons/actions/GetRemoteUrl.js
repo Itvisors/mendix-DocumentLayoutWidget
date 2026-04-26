@@ -15,6 +15,6 @@ import { Big } from "big.js";
  */
 export async function GetRemoteUrl() {
 	// BEGIN USER CODE
-	throw new Error("JavaScript action was not implemented");
+    return mx.remoteUrl;
 	// END USER CODE
 }

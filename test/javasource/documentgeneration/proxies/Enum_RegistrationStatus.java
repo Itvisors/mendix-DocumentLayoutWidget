@@ -6,8 +6,8 @@ package documentgeneration.proxies;
 
 public enum Enum_RegistrationStatus
 {
-	Registered("6fffc583-c855-48a7-8488-467d4814c319"),
-	Unregistered("943be9e9-d7da-408c-9950-1ee8b5b063bb");
+	Registered("2418858a-33f9-4510-a7fe-e2843cfd2b64"),
+	Unregistered("d84fe7f8-acb3-43e2-800d-13f09910e9b7");
 
 	private final java.lang.String i18nCaptionKey;
 	

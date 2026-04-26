@@ -6,7 +6,7 @@ package communitycommons.proxies;
 
 public enum LogNodes
 {
-	CommunityCommons("fb2517d1-8f19-4adb-8027-77892791fc33");
+	CommunityCommons("fc70bfed-7e4c-42f9-bc87-b93737618248");
 
 	private final java.lang.String i18nCaptionKey;
 	

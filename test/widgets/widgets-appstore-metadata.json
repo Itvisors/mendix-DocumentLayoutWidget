@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0",
+  "widgets": [
+    {
+      "sha-256": "f348981cfa1834e4f9ae1a397e5ef1c3634e0c2212da57853f7c1a4d4b7f4d20",
+      "name": "Image",
+      "version": "1.5.0",
+      "appStoreVersionGuid": "37cce618-06d0-4126-a768-0c398f307172"
+    },
+    {
+      "sha-256": "4cc969bd1e22666c57b8ac5bdc802d0f41690516f23f099b2f329ddccdb2c8cf",
+      "name": "Combobox",
+      "version": "2.7.1",
+      "appStoreVersionGuid": "34f2783b-33a2-4775-967f-35d13b773e84"
+    },
+    {
+      "sha-256": "e26a6d07f707098438de496fa04a48f68e3fa178cc647926e42fb0317b759cf0",
+      "name": "Combo box",
+      "version": "2.8.2",
+      "appStoreVersionGuid": "820eb18a-0f96-483c-941e-4efd7e91fbb5"
+    },
+    {
+      "sha-256": "07db6a5797eaa1c19923f8475842259209331d749937a1be3c621a852cf6729c",
+      "name": "Document Viewer",
+      "version": "1.2.2",
+      "appStoreVersionGuid": "a67a4730-31c2-4104-9c75-569d6d84fd9d"
+    }
+  ]
+}
